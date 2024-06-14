@@ -1,9 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <base target="_top">
-  </head>
-  <body>
-    hello world
-  </body>
+<head>
+  <title>Form with Redirect</title>
+  <script>
+    function attachFormHandler() {
+      const iframe = document.getElementById('google-form-iframe');
+      iframe.onload = function() {
+        const form = iframe.contentWindow.document.querySelector('form');
+        form.addEventListener('submit', onSubmit);
+      };
+    }
+
+    function onSubmit(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const response = formData.get('entry.1543823253_sentinel');  // Replace 'entry.XXXXXX' with the actual name attribute of the input field.
+
+      const urlMap = {
+        'Physical Abuse': 'https://example.com/page1',
+        'Emotional Abuse & Negligent treatment': 'https://example.com/page2',
+        'Cyber-Based Abuse and Bullying': 'https://example.com/page3',
+        'Exploitation & Child Labour': 'https://example.com/page4',
+        'Sexual Abuse': 'https://example.com/page5'
+      };
+
+      const redirectUrl = urlMap[response] || 'https://example.com/default';
+      window.location.href = redirectUrl;
+    }
+  </script>
+</head>
+<body onload="attachFormHandler()">
+  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfwVPBWf5hdRZa3kRPVAUULiK_2c7vPhPllccYJWd8v7GN9jA/viewform?embedded=true" width="800" height="1000" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+</body>
 </html>
+
